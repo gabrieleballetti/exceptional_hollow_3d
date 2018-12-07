@@ -39,19 +39,44 @@ function has_projection(P)
 end function;
 
 // extract the list of the subpolytopes of the 12
-// maximal hollow polytopes (see details in the readme),
-// having width at least 2
-hollow:=[];
-file:="path/3p_hollow_width_gt1.txt";
-fh:=Open(file,"r");
-while true do
-	sl:=Gets(fh);
-	if IsEof(sl) then
-		break;
-	end if;
-	s:=eval(sl);
-	Append(~hollow,s);
-end while;
+// maximal hollow polytopes having width at least 2
+A:=[
+	[[0,0,0],[1,0,0],[1,2,0],[2,2,0],[1,0,2],[2,0,2],[2,2,2],[3,2,2]],
+	[[0,0,0],[2,0,0],[2,4,0],[2,0,4]],
+	[[0,0,0],[1,0,0],[2,4,0],[3,0,4]],
+	[[0,0,0],[1,0,0],[2,3,0],[1,0,3],[-1,-6,3]],
+	[[0,0,0],[3,0,0],[0,3,0],[0,0,3]],
+	[[0,0,0],[1,0,0],[1,4,0],[3,0,4],[-1,4,-4]],
+	[[0,0,0],[1,0,0],[4,6,0],[4,0,6]],
+	[[0,0,0],[1,0,0],[2,3,0],[5,3,9]],
+	[[0,0,0],[1,0,0],[3,4,0],[7,4,8]],
+	[[0,0,0],[1,0,0],[2,3,0],[1,0,3],[2,0,3],[3,3,3]],
+	[[0,0,0],[1,0,0],[2,5,0],[3,0,5]],
+	[[0,0,0],[1,0,0],[1,2,0],[3,2,4],[2,2,0],[4,2,4]]
+];
+N:=Max([NumberOfPoints(Polytope(s)) : s in A]);
+list:=[[] : i in [1..N]];
+for s in A do
+	P:=Polytope(s);
+	n:=NumberOfPoints(P);
+	Append(~list[n],Polytope([Eltseq(p) : p in AffineNormalForm(P)]));
+end for;
+for i in [N..1 by -1] do
+	if #list[i] eq 0 then break; end if;
+	for P in list[i] do
+		for v in Vertices(P) do
+			Q:=Polytope(Exclude(Points(P),v));
+			if Dimension(Q) eq D and Width(Q) gt 1 then
+				QQ:=Polytope([Eltseq(p) : p in AffineNormalForm(Q)]);
+				Append(~list[NumberOfPoints(QQ)],QQ);
+			end if;
+		end for;
+	end for;
+	set_p:=SequenceToSet(list[i-1]);
+	list[i-1]:=SetToSequence(set_p);
+	printf "%o - %o\n",i,#list[i];
+end for;
+hollow:=&cat(list);
 
 // keep the polytopes not having a projection to 2*D_2
 // (it is enough to check for the directions v-u where
