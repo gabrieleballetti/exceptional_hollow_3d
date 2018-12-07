@@ -3,7 +3,7 @@ Magma code and output for the extraction of the exceptional hollow 3-dimensional
 
 Here by *hollow* we mean a lattice polytope without interior lattice points, by *exceptional* we mean that it has width larger than one and it admits no projection to the infinite prism over double dilation of a unimodular triangle.
 
-In `main.m` we first extract the 3992 (up to equivalence) subpolytopes of the 12 maximal hollow polytopes having width larger than one,
+In `main.m` we first extract the 3992 (up to equivalence) subpolytopes of the 12 maximal hollow polytopes having width larger than one (Averkov, Wagner, Weismantel *Maximal lattice-free polyhedra: finiteness and an explicit description in dimension three* **Math. Oper. Res.** 36 (2011), no. 4, 721–742),
 ```
 [[0,0,0],[1,0,0],[1,2,0],[2,2,0],[1,0,2],[2,0,2],[2,2,2],[3,2,2]],
 [[0,0,0],[2,0,0],[2,4,0],[2,0,4]],
